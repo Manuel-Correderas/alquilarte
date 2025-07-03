@@ -1,0 +1,105 @@
+extends ../layouts/layoutLogin
+
+block content
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-6
+        .card.shadow
+          .card-body
+            h2.mb-4.text-center Registrarse
+
+            // Mensajes del servidor
+            if messages && messages.error
+              .alert.alert-danger #{messages.error}
+            if messages && messages.success
+              .alert.alert-success #{messages.success}
+
+            form#registerForm(method='POST', action='/api/auth/register', novalidate)
+              .mb-3
+                label.form-label(for="username") Nombre de Usuario
+                input.form-control(type="text", id="username", name="username", required value=(oldInput && oldInput.username) || '')
+              .mb-3
+                label.form-label(for="email") Email
+                input.form-control(type="email", id="email", name="email", required value=(oldInput && oldInput.email) || '')
+              .mb-3
+                label.form-label(for="password") Contraseña
+                input.form-control(type="password", id="password", name="password", required)
+              .mb-3
+                label.form-label(for="confirmPassword") Confirmar Contraseña
+                input.form-control(type="password", id="confirmPassword", name="confirmPassword", required)
+              .mb-3
+                label.form-label(for="role") Rol
+                select.form-select(id="role", name="role", required)
+                  option(value="") -- Selecciona un rol --
+                  option(value="inquilino", selected=(oldInput && oldInput.role === 'inquilino')) Inquilino
+                  option(value="propietario", selected=(oldInput && oldInput.role === 'propietario')) Propietario
+                  option(value="empleado", selected=(oldInput && oldInput.role === 'empleado')) Empleado
+
+              .text-danger.small#message(style="display:none;")
+              button.btn.btn-primary.w-100(type="submit") Registrarse
+
+            .mt-3.text-center
+              p ¿Ya tienes una cuenta? 
+                a(href="/login") Inicia sesión aquí
+
+block scripts
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('registerForm');
+      const message = document.getElementById('message');
+      const inputs = form.querySelectorAll('input, select');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        message.style.display = 'none';
+        message.textContent = '';
+
+        const formData = {
+          username: form.username.value.trim(),
+          email: form.email.value.trim(),
+          password: form.password.value,
+          confirmPassword: form.confirmPassword.value,
+          role: form.role.value,
+        };
+
+        // Validación cliente
+        if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword || !formData.role) {
+          message.textContent = 'Todos los campos son obligatorios.';
+          message.style.display = 'block';
+          return;
+        }
+
+        if (formData.password.length < 6) {
+          message.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+          message.style.display = 'block';
+          return;
+        }
+
+        if (formData.password !== formData.confirmPassword) {
+          message.textContent = 'Las contraseñas no coinciden.';
+          message.style.display = 'block';
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            window.location.href = `/verify-code?email=${encodeURIComponent(formData.email)}`;
+          } else {
+            message.textContent = data.message || 'Error en el registro.';
+            message.style.display = 'block';
+          }
+        } catch (err) {
+          console.error(err);
+          message.textContent = 'Error al conectar con el servidor.';
+          message.style.display = 'block';
+        }
+      });
+    });

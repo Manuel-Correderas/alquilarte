@@ -1,0 +1,55 @@
+extends layoutTarea
+
+block contenido
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-10
+        .card.shadow
+          .card-header.bg-primary.text-white
+            h4.mb-0 Crear Nueva Tarea
+
+          .card-body
+            form(action="/tareas/nuevaTarea", method="POST")
+
+              .mb-3
+                label.form-label(for="titulo") Título:
+                input.form-control(type="text", id="titulo", name="titulo", required)
+
+              .mb-3
+                label.form-label(for="descripcion") Descripción:
+                textarea.form-control(id="descripcion", name="descripcion", rows="3", placeholder="Describa brevemente la tarea")
+
+              .mb-3
+                label.form-label(for="area") Área:
+                select.form-select(id="area", name="area", required)
+                  option(value="") Seleccione un área
+                  each areaOpt in areas
+                    option(value=areaOpt)= areaOpt
+
+              .mb-3
+                label.form-label(for="estado") Estado:
+                select.form-select(id="estado", name="estado", required)
+                  each estadoOpt in estados
+                    option(value=estadoOpt)= estadoOpt
+
+              .mb-3
+                label.form-label(for="prioridad") Prioridad:
+                select.form-select(id="prioridad", name="prioridad", required)
+                  each prioridadOpt in prioridades
+                    option(value=prioridadOpt)= prioridadOpt
+
+              .mb-3
+                label.form-label(for="fecha") Fecha Límite:
+                input.form-control(type="date", id="fecha", name="fecha")
+
+              .mb-3
+                label.form-label(for="empleadoId") Empleado Asignado (ID):
+                input.form-control(type="string", id="empleadoId", name="empleadoId", placeholder="ID del empleado (ej. 100)")
+
+              .d-flex.justify-content-end
+                button.btn.btn-primary(type="submit")
+                  i.fa.fa-plus-circle.me-1
+                  | Crear Tarea
+                a.btn.btn-secondary.ms-2(href="/tareas")
+                  i.fa.fa-times.me-1
+                  | Cancelar

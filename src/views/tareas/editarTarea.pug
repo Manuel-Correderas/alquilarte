@@ -1,0 +1,57 @@
+extends layoutTarea
+
+block contenido
+  .container.mt-5
+    .row.justify-content-center
+      .col-md-10
+        .card.shadow
+          .card-body
+            h2.text-center.mb-4 Editar Tarea: #{tarea.titulo}
+
+            form(action=`/tareas/${tarea.tareaID}/editar?_method=POST`, method="POST")
+              .mb-3
+                label.form-label(for="titulo") Título:
+                input.form-control(type="text", id="titulo", name="titulo", required, value=tarea.titulo)
+
+              .mb-3
+                label.form-label(for="descripcion") Descripción:
+                textarea.form-control(id="descripcion", name="descripcion", rows="3")= tarea.descripcion
+
+              .mb-3
+                label.form-label(for="area") Área:
+                select.form-select(id="area", name="area", required)
+                  option(value="") Seleccione un área
+                  each areaOpt in areas
+                    option(value=areaOpt, selected=tarea.area === areaOpt)= areaOpt
+
+              .mb-3
+                label.form-label(for="estado") Estado:
+                select.form-select(id="estado", name="estado", required)
+                  each estadoOpt in estados
+                    option(value=estadoOpt, selected=tarea.estado === estadoOpt)= estadoOpt
+
+              .mb-3
+                label.form-label(for="prioridad") Prioridad:
+                select.form-select(id="prioridad", name="prioridad", required)
+                  each prioridadOpt in prioridades
+                    option(value=prioridadOpt, selected=tarea.prioridad === prioridadOpt)= prioridadOpt
+
+              .mb-3
+                label.form-label(for="fecha") Fecha Límite:
+                input.form-control(type="date", id="fecha", name="fecha", required, value=tarea.fecha)
+
+              .mb-3
+                label.form-label(for="empleadoId") Empleado Asignado (ID):
+                input.form-control(type="number", id="empleadoId", name="empleadoId", value=tarea.empleadoId)
+
+              .mb-3
+                label.form-label(for="informe") Informe:
+                textarea.form-control(id="informe", name="informe", rows="3")= tarea.informe
+
+              .form-check.mb-3
+                input.form-check-input(type="checkbox", id="finalizada", name="finalizada", checked=tarea.finalizada)
+                label.form-check-label(for="finalizada") Finalizada
+
+              .d-flex.justify-content-end
+                button.btn.btn-primary(type="submit") Actualizar Tarea
+                a.btn.btn-secondary.ms-2(href="/tareas") Cancelar

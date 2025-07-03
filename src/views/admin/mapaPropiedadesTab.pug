@@ -1,0 +1,77 @@
+//- ./mapaPropiedadesTab.pug
+//- ./mapaPropiedadesTab.pug
+
+.row
+  // 🔍 Columna izquierda: Formulario de búsqueda (4 columnas de 12)
+  .col-md-4
+    h5.mb-3 Buscar Dirección
+    form#formMapa
+      .input-group.mb-3
+        input#direccion.form-control(type="text", placeholder="Ej: Av. Corrientes 1234, CABA")
+        button.btn.btn-primary(type="submit")
+          i.fa.fa-search.me-1
+          | Buscar
+
+  // 🗺️ Columna derecha: Mapa (8 columnas de 12)
+  .col-md-8
+    #mapa(style="height: 450px; width: 100%; border: 1px solid #ccc; border-radius: 6px;")
+
+// 📦 Leaflet
+script(src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js")
+
+// 🚀 Script de inicialización
+script.
+  let map;
+  let marker;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('formMapa');
+    const input = document.getElementById('direccion');
+    const mapaDiv = document.getElementById('mapa');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const direccion = input.value.trim();
+      if (!direccion) return alert('Ingresá una dirección');
+
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(direccion)}&format=json`);
+        const data = await res.json();
+
+        if (!data || data.length === 0) {
+          alert('No se encontró la dirección');
+          return;
+        }
+
+        const lat = parseFloat(data[0].lat);
+        const lon = parseFloat(data[0].lon);
+
+        if (!map) {
+          map = L.map('mapa').setView([lat, lon], 15);
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+          }).addTo(map);
+        } else {
+          map.setView([lat, lon], 15);
+        }
+
+        if (marker) map.removeLayer(marker);
+
+        marker = L.marker([lat, lon]).addTo(map).bindPopup(direccion).openPopup();
+
+        setTimeout(() => {
+          map.invalidateSize();
+        }, 300);
+      } catch (error) {
+        console.error(error);
+        alert('Error al buscar la dirección');
+      }
+    });
+
+    const tab = document.querySelector('a[href="#mapa"]');
+    if (tab) {
+      tab.addEventListener('shown.bs.tab', () => {
+        if (map) map.invalidateSize();
+      });
+    }
+  });

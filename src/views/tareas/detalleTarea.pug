@@ -1,0 +1,57 @@
+extends layoutTarea
+
+
+block contenido
+  .container.mt-5
+    .card.shadow
+      .card-header.bg-primary.text-white
+        h3.mb-0 Detalle de la Tarea
+
+      .card-body
+        dl.row
+          dt.col-sm-4.fw-bold ID
+          dd.col-sm-8 #{tarea.tareaID}
+
+          dt.col-sm-4.fw-bold Título
+          dd.col-sm-8 #{tarea.titulo}
+
+          dt.col-sm-4.fw-bold Descripción
+          dd.col-sm-8 #{tarea.descripcion}
+
+          dt.col-sm-4.fw-bold Estado
+          dd.col-sm-8
+            span.badge.rounded-pill(
+              class={
+                'bg-success': tarea.estado === 'completada',
+                'bg-warning text-dark': tarea.estado === 'en progreso',
+                'bg-secondary': tarea.estado === 'pendiente'
+              }
+            ) #{tarea.estado}
+
+          dt.col-sm-4.fw-bold Prioridad
+          dd.col-sm-8
+            span.badge.rounded-pill(
+              class={
+                'bg-danger': tarea.prioridad === 'alta',
+                'bg-warning text-dark': tarea.prioridad === 'media',
+                'bg-info text-dark': tarea.prioridad === 'baja'
+              }
+            ) #{tarea.prioridad}
+
+          dt.col-sm-4.fw-bold Fecha
+          dd.col-sm-8 #{tarea.fecha}
+
+          dt.col-sm-4.fw-bold Área
+          dd.col-sm-8 #{tarea.area}
+
+          dt.col-sm-4.fw-bold Empleado Asignado
+          dd.col-sm-8 #{tarea.empleadoId || 'No asignado'}
+
+          if tarea.informe
+            dt.col-sm-4.fw-bold Informe
+            dd.col-sm-8.white-space-pre-wrap #{tarea.informe}
+
+    .mt-4.text-end
+      a.btn.btn-secondary(href="/tareas")
+        i.fas.fa-arrow-left.me-1
+        | Volver a la lista

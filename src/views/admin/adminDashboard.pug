@@ -1,0 +1,68 @@
+extends ../layouts/layoutAdmin.pug
+
+block contenido
+  .container.mt-4
+    h2.text-center.mb-4 Panel de Administración
+
+    ul.nav.nav-tabs#adminTabs(role="tablist")
+      li.nav-item
+        a.nav-link.tab-button.active#tasks-tab(data-bs-toggle="tab", href="#tasks", role="tab") Tareas
+      li.nav-item
+        a.nav-link.tab-button#turno-tab(data-bs-toggle="tab", href="#turno", role="tab") Turnos
+      li.nav-item
+        a.nav-link.tab-button#departments-tab(data-bs-toggle="tab", href="#departments", role="tab") Departamentos
+      li.nav-item
+        a.nav-link.tab-button#profile-tab(data-bs-toggle="tab", href="#profile", role="tab") Gestión de Usuarios
+      li.nav-item
+        a.nav-link.tab-button#propiedad-tab(data-bs-toggle="tab", href="#propiedad", role="tab") Propiedad
+      li.nav-item
+        a.nav-link.tab-button#mapa-tab(data-bs-toggle="tab", href="#mapa", role="tab") Mapa
+      li.nav-item
+        a.nav-link.tab-button#automizacionCobro-tab(data-bs-toggle="tab", href="#automizacionCobro", role="tab") Alojamiento y Cobranza Automatizada
+      li.nav-item
+        a.nav-link.tab-button#reportes-tab(data-bs-toggle="tab", href="#reportes", role="tab") Reportes
+
+    .tab-content.mt-3
+      // 🔹 Tareas
+      .tab-pane.fade#tasks(role="tabpanel")
+        include ../tareas/listaTareas.pug
+
+
+      // 🔹 Turnos
+      .tab-pane.fade#turno(role="tabpanel")
+        include ../turno/listaTurnos.pug
+
+
+      // 🔹 Departamentos
+      .tab-pane.fade#departments(role="tabpanel")
+        include ./departamento.pug
+
+      // 🔹 Usuarios
+      .tab-pane.fade#profile(role="tabpanel")
+        include ./gestionUsuarios.pug
+
+      // 🔹 Mapa
+      .tab-pane.fade#mapa(role="tabpanel")
+        .container.mt-4
+          h3.text-success.mb-3 Buscar Dirección en el Mapa
+          include ./mapaPropiedadesTab.pug
+
+
+
+
+
+      // 🔹 Automatización de Cobro
+      .tab-pane.fade#automizacionCobro(role="tabpanel")
+        .container.mt-4
+          h3 Alojamiento y Cobranza Automatizada
+          p Aquí va el contenido para esta sección (implementar)
+
+
+          
+      // 🔹 Reportes
+      .tab-pane.fade#reportes(role="tabpanel")
+        h3 Reportes
+        p Aquí va el contenido para reportes (implementar)
+
+block scripts
+  script(src="/js/admin/ADMINDASHBOARD.JS", type="module")
