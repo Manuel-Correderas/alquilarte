@@ -29,17 +29,23 @@ export const crearPropiedad = async (req, res) => {
     const nueva = new Propiedad({
       ...data,
       imagenUrl,
-      propietarioId: req.user._id,  // suponer que req.user viene del middleware auth
+      propietarioId: req.user._id,
       activo: true
     });
 
     await nueva.save();
-    res.status(201).json({ mensaje: 'Propiedad registrada', propiedad: nueva });
+
+    console.log('[CONTROLLER] Propiedad guardada correctamente:', nueva._id);
+
+    // ✅ Redirección después de guardar
+    res.redirect('/admin/propiedades'); // Cambiá esto según tu ruta real de listado
   } catch (error) {
     console.error('[CONTROLLER] Error al crear propiedad:', error);
-    res.status(500).json({ mensaje: 'Error al guardar propiedad' });
+    res.status(500).render('error', { title: 'Error', message: 'Error al guardar la propiedad' });
   }
 };
+
+
 
 // Obtiene todas las propiedades del usuario logueado
 export const obtenerMisPropiedades = async (req, res) => {

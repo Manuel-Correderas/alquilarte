@@ -17,7 +17,9 @@ import indexViewRoutes from './routes/views/indexViewRoutes.js';
 import adminDepartmentApiRoutes from './routes/api/adminDepartmentApiRoutes.js';
 import adminUserApiRoutes from './routes/api/adminUserApiRoutes.js';
 import propiedadesApiRoutes from './routes/api/propiedadesApiRoutes.js';
+// Estás en src/app.js, y propiedadViewRoutes.js está en routes/
 import propiedadViewRoutes from './routes/propiedadViewRoutes.js';
+
 ////
 import turnoRoutes from './routes/api/turnoRoutes.js';
 
@@ -25,6 +27,7 @@ import turnoRoutes from './routes/api/turnoRoutes.js';
 import tareaRoutes from './routes/api/tareaRoutes.js';
 
 dotenv.config();
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -65,7 +68,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminDepartmentApiRoutes);
 app.use('/api/admin/users', adminUserApiRoutes);
 app.use('/api/propiedades', propiedadesApiRoutes);
-app.use('/propiedad', propiedadViewRoutes);
+app.use('/', propiedadViewRoutes);
 app.use('/', indexViewRoutes);
 ////
 app.use(methodOverride('_method'));
@@ -104,4 +107,19 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`[APP.JS] Servidor corriendo en http://localhost:${PORT}`);
 });
+//// tests
+// src/app.js (últimas líneas)
 
+// Puerto
+/*const PORT = process.env.PORT || 3000;
+
+// Solo iniciar el servidor si no estamos en test
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`[APP.JS] Servidor corriendo en http://localhost:${PORT}`);
+  });
+}
+*/
+
+
+export default app;

@@ -1,0 +1,88 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Añadir Propiedad
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+  body.bg-light
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      .container
+        a.navbar-brand(href='/admin/dashboard') Alquilarte Admin
+        .d-flex.ms-auto
+          span.text-light.me-3 #{user && user.nombre ? user.nombre : 'Admin'}
+
+    .container.mt-5
+      h2.mb-4 Añadir Propiedad
+
+      form(method="POST", action="/admin/propiedades/nueva", enctype="multipart/form-data", onsubmit="this.querySelector('button').disabled = true;")
+
+        .mb-3
+          label.form-label(for="titulo") Título
+          input.form-control(type="text", name="titulo", id="titulo", required)
+
+        .mb-3
+          label.form-label(for="descripcion") Descripción
+          textarea.form-control(name="descripcion", id="descripcion", rows="3", required)
+
+        .mb-3
+          label.form-label(for="tipo") Tipo
+          select.form-select(name="tipo", id="tipo", required)
+            option(value="casa") Casa
+            option(value="departamento") Departamento
+            option(value="local") Local
+            option(value="oficina") Oficina
+            option(value="otro") Otro
+
+        .mb-3
+          label.form-label(for="transaccion") Tipo de Transacción
+          select.form-select(name="transaccion", id="transaccion", required)
+            option(value="alquiler") Alquiler
+            option(value="venta") Venta
+            option(value="alquiler temporario") Alquiler Temporario
+
+        .mb-3
+          label.form-label(for="valor") Precio
+          input.form-control(type="number", name="precio[valor]", id="valor", required)
+
+        .mb-3
+          label.form-label(for="moneda") Moneda
+          select.form-select(name="precio[moneda]", id="moneda")
+            option(value="ARS") ARS
+            option(value="USD") USD
+            option(value="EUR") EUR
+
+        // 🏠 DIRECCIÓN
+        .mb-3
+          label.form-label(for="calle") Calle
+          input.form-control(type="text", name="ubicacion[calle]", id="calle", required)
+
+        .mb-3
+          label.form-label(for="numero") Número
+          input.form-control(type="text", name="ubicacion[numero]", id="numero", required)
+
+        .mb-3
+          label.form-label(for="ciudad") Ciudad
+          input.form-control(type="text", name="ubicacion[ciudad]", id="ciudad", required)
+
+        .mb-3
+          label.form-label(for="provincia") Provincia
+          input.form-control(type="text", name="ubicacion[provincia]", id="provincia")
+
+        .mb-3
+          label.form-label(for="pais") País
+          input.form-control(type="text", name="ubicacion[pais]", id="pais")
+
+        .mb-3
+          label.form-label(for="codigoPostal") Código Postal
+          input.form-control(type="text", name="ubicacion[codigoPostal]", id="codigoPostal")
+
+        .mb-3
+          label.form-label(for="imagen") Imagen
+          input.form-control(type="file", name="foto", id="imagen")
+
+        .d-flex.justify-content-between
+          a.btn.btn-secondary(href="/admin/propiedades") ← Volver
+          button.btn.btn-success(type="submit") Guardar Propiedad
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")

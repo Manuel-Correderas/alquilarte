@@ -1,0 +1,100 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Editar Propiedad
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css")
+  body.bg-light
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      .container
+        a.navbar-brand(href='/admin/dashboard') Alquilarte Admin
+        span.text-light.ms-auto #{user && user.nombre ? user.nombre : 'Admin'}
+
+    .container.mt-5
+      h2.mb-4 Editar Propiedad
+      
+      form(method="POST", action=`/admin/propiedades/editar/${propiedad._id}`, enctype="multipart/form-data", onsubmit="this.querySelector('button').disabled = true;")
+
+        .mb-3
+          label.form-label(for="titulo") Título
+          input.form-control(type="text", name="titulo", id="titulo", required, value=propiedad.titulo)
+
+        .mb-3
+          label.form-label(for="descripcion") Descripción
+          textarea.form-control(name="descripcion", id="descripcion", rows="3", required)= propiedad.descripcion
+
+        .mb-3
+          label.form-label(for="tipo") Tipo
+          select.form-select(name="tipo", id="tipo", required)
+            option(value="casa", selected=propiedad.tipo === 'casa') Casa
+            option(value="departamento", selected=propiedad.tipo === 'departamento') Departamento
+            option(value="local", selected=propiedad.tipo === 'local') Local
+            option(value="oficina", selected=propiedad.tipo === 'oficina') Oficina
+            option(value="otro", selected=propiedad.tipo === 'otro') Otro
+
+        .mb-3
+          label.form-label(for="transaccion") Tipo de Transacción
+          select.form-select(name="transaccion", id="transaccion", required)
+            option(value="alquiler", selected=propiedad.transaccion === 'alquiler') Alquiler
+            option(value="venta", selected=propiedad.transaccion === 'venta') Venta
+            option(value="alquiler temporario", selected=propiedad.transaccion === 'alquiler temporario') Alquiler Temporario
+
+        .mb-3
+          label.form-label(for="valor") Precio
+          input.form-control(type="number", name="precio[valor]", id="valor", required, value=(propiedad.precio && propiedad.precio.valor))
+
+        .mb-3
+          label.form-label(for="moneda") Moneda
+          select.form-select(name="precio[moneda]", id="moneda")
+            option(value="ARS", selected=(propiedad.precio && propiedad.precio.moneda === 'ARS')) ARS
+            option(value="USD", selected=(propiedad.precio && propiedad.precio.moneda === 'USD')) USD
+            option(value="EUR", selected=(propiedad.precio && propiedad.precio.moneda === 'EUR')) EUR
+
+        hr
+
+        h5.mb-3 Dirección
+
+        .mb-3
+          label.form-label(for="calle") Calle
+          input.form-control(type="text", name="ubicacion[calle]", id="calle", required, value=(propiedad.ubicacion && propiedad.ubicacion.calle))
+
+        .mb-3
+          label.form-label(for="numero") Número
+          input.form-control(type="text", name="ubicacion[numero]", id="numero", required, value=(propiedad.ubicacion && propiedad.ubicacion.numero))
+
+        .mb-3
+          label.form-label(for="ciudad") Ciudad
+          input.form-control(type="text", name="ubicacion[ciudad]", id="ciudad", required, value=(propiedad.ubicacion && propiedad.ubicacion.ciudad))
+
+        .mb-3
+          label.form-label(for="provincia") Provincia
+          input.form-control(type="text", name="ubicacion[provincia]", id="provincia", value=(propiedad.ubicacion && propiedad.ubicacion.provincia))
+
+        .mb-3
+          label.form-label(for="pais") País
+          input.form-control(type="text", name="ubicacion[pais]", id="pais", value=(propiedad.ubicacion && propiedad.ubicacion.pais))
+
+        .mb-3
+          label.form-label(for="codigoPostal") Código Postal
+          input.form-control(type="text", name="ubicacion[codigoPostal]", id="codigoPostal", value=(propiedad.ubicacion && propiedad.ubicacion.codigoPostal))
+
+        .mb-3
+          label.form-label(for="imagen") Imagen (dejar en blanco si no se actualiza)
+          input.form-control(type="file", name="foto", id="imagen")
+
+        if propiedad.foto
+          .mb-3
+            p Imagen actual:
+            img(src=`/uploads/${propiedad.foto}`, alt="Imagen actual", class="img-thumbnail", style="max-width: 200px;")
+
+        .d-flex.justify-content-between
+          a.btn.btn-secondary(href="/admin/propiedades") ← Volver
+          button.btn.btn-success(type="submit") Guardar Cambios
+
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js")
+
+
+
+
+

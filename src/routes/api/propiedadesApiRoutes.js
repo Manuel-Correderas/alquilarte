@@ -1,10 +1,16 @@
 import express from 'express';
-import { getPropiedadesActivas, mostrarMapa } from '../../controllers/propiedadController.js';
+import {
+  crearPropiedad,
+  getPropiedadesActivas,
+  mostrarMapa
+} from '../../controllers/propiedadController.js';
+import { protect, authorize } from '../../middlewares/authMiddleware.js';
+import upload from '../../middlewares/upload.js';
 
 const router = express.Router();
 
-// Ruta API para obtener propiedades en JSON
-router.get('/api/propiedades', async (req, res) => {
+// ✅ Ruta correcta: GET /api/propiedades
+router.get('/', async (req, res) => {
   try {
     const propiedades = await getPropiedadesActivas();
     res.json(propiedades);
@@ -14,7 +20,17 @@ router.get('/api/propiedades', async (req, res) => {
   }
 });
 
-// Ruta para mostrar el mapa con propiedades
+// ✅ Ruta para mostrar el mapa: GET /api/propiedades/mapa-propiedades
 router.get('/mapa-propiedades', mostrarMapa);
 
+// ✅ Ruta para crear propiedad: POST /api/propiedades
+router.post(
+  '/',
+  protect,
+  authorize(['admin', 'propietario']),
+  upload.single('foto'),
+  crearPropiedad
+);
+
 export default router;
+
